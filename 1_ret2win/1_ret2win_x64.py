@@ -1,6 +1,6 @@
 from pwn import *
 
-elf = ELF("ret2win_patched")
+elf = ELF("ret2win")
 
 context.binary = elf
 context.terminal = ['konsole', '-e']

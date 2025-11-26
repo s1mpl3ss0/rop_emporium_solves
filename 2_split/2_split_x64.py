@@ -1,6 +1,6 @@
 from pwn import *
 
-elf = ELF("split_patched")
+elf = ELF("split")
 rop = ROP(elf)
 
 context.binary = elf
