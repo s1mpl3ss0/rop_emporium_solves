@@ -11,5 +11,5 @@ Run `pip-compile` then `pip-sync` to setup the environment.
 
 ## Tools
 
-- [pwninit](https://github.com/io12/pwninit)
+- [pwninit](https://github.com/io12/pwninit) (optional)
 - [pwntools](https://github.com/Gallopsled/pwntools)
