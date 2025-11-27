@@ -6,8 +6,9 @@
 #
 bcrypt==5.0.0
     # via paramiko
-capstone==6.0.0a5
+capstone==5.0.3
     # via
+    #   -r requirements.in
     #   pwntools
     #   ropgadget
 certifi==2025.11.12
