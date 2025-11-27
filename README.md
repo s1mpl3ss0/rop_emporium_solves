@@ -25,4 +25,4 @@ Run `pip-compile` then `pip-sync` to setup the environment.
 | [badchars](https://ropemporium.com/challenge/badchars.html) | [✔️](./5_badchars/5_badchars_x64.py) | ❌ | ❌ | ❌ |
 | [fluff](https://ropemporium.com/challenge/fluff.html) | [✔️](./6_fluff/6_fluff_x64.py) | ❌ | ❌ | ❌ |
 | [pivot](https://ropemporium.com/challenge/pivot.html) | [✔️](./7_pivot/7_pivot_x64.py) | ❌ | ❌ | ❌ |
-| [ret2csu](https://ropemporium.com/challenge/ret2csu.html) | [✔️](./8_ret2csu/8_ret2csu_x64.py) | ❔ | [✔️](./8_ret2csu/8_ret2csu_armv5.py) | ❌ |
+| [ret2csu](https://ropemporium.com/challenge/ret2csu.html) | [✔️](./8_ret2csu/8_ret2csu_x64.py) | [❔](https://ropemporium.com/binary/ret2csu32.zip "Binary not available") | [✔️](./8_ret2csu/8_ret2csu_armv5.py) | ❌ |
