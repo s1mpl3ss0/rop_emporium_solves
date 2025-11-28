@@ -31,7 +31,7 @@ def main():
     assert len(payload) <= READ_SIZE
 
     c = connection()
-    c.sendlineafter(b'> ', payload)
+    c.sendafter(b'> ', payload)
     print(c.recvregex(rb'ROPE{.*}', capture=True).group().strip().decode())
 
 if __name__ == '__main__':
