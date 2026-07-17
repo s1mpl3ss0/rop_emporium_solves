@@ -23,4 +23,4 @@ Run `uv sync` to setup the environment.
 | 5 | [badchars](https://ropemporium.com/challenge/badchars.html) | [✔️](./5_badchars/5_badchars_x64.py) | [✔️](./5_badchars/5_badchars_x86.py) | [✔️](./5_badchars/5_badchars_armv5.py) | ❌ |
 | 6 | [fluff](https://ropemporium.com/challenge/fluff.html) | [✔️](./6_fluff/6_fluff_x64.py) | [✔️](./6_fluff/6_fluff_x86.py) | ❌ | ❌ |
 | 7 | [pivot](https://ropemporium.com/challenge/pivot.html) | [✔️](./7_pivot/7_pivot_x64.py) | [✔️](./7_pivot/7_pivot_x86.py) | ❌ | ❌ |
-| 8 | [ret2csu](https://ropemporium.com/challenge/ret2csu.html) | [✔️](./8_ret2csu/8_ret2csu_x64.py) | [❔](https://ropemporium.com/binary/ret2csu32.zip "Binary not available") | [✔️](./8_ret2csu/8_ret2csu_armv5.py) | ❌ |
+| 8 | [ret2csu](https://ropemporium.com/challenge/ret2csu.html) | [✔️](./8_ret2csu/8_ret2csu_x64.py) | [❔](https://ropemporium.com/binary/ret2csu32.zip "Binary not available") | [✔️](./8_ret2csu/8_ret2csu_armv5.py) | [✔️](./8_ret2csu/8_ret2csu_mipsel.py) |
